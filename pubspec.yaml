@@ -12,7 +12,8 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_facebook_auth: ^3.5.1
-
+  provider: ^6.0.0
+  http: ^0.13.3
 
   cupertino_icons: ^1.0.3
 
@@ -23,15 +24,3 @@ dev_dependencies:
 flutter:
 
   uses-material-design: true
-
-  # To add assets to your application, add an assets section, like this:
-  # assets:
-  #   - images/a_dot_burr.jpeg
-  #   - images/a_dot_ham.jpeg
-
-  # fonts:
-  #   - family: Schyler
-  #     fonts:
-  #       - asset: fonts/Schyler-Regular.ttf
-  #       - asset: fonts/Schyler-Italic.ttf
-  #         style: italic

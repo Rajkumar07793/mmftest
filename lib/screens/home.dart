@@ -1,8 +1,9 @@
-import 'dart:convert';
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
+import 'package:mmftest/models/model.dart';
+import 'package:mmftest/screens/bottomTab.dart';
+import 'package:provider/provider.dart';
 
 class Home extends StatefulWidget {
   const Home({Key key}) : super(key: key);
@@ -14,45 +15,43 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
-    Map<String, dynamic> data;
+    var data = context.watch<MyModel>();
     return Scaffold(
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             ElevatedButton(
-              onPressed: () async{
-                FacebookAuth.instance.webInitialize(
-                  appId: "296063998944959",
-                  cookie: true,
-                  xfbml: true,
-                  version: "v11.0",
-                );
-                print("Auth");
-                FacebookAuth.i.expressLogin();
-                FacebookAuth.getInstance().accessToken.then((token) {
-                  print(token);
-                });
-                  FacebookAuth.instance.getUserData().then((value){
+              onPressed: () async {
+                final LoginResult result = await FacebookAuth.instance.login(
+                  permissions: [
+                    'public_profile',
+                    'email',
+                    'pages_show_list',
+                  ],
+                ).then((value) {
+                  FacebookAuth.instance.getUserData().then((value) {
                     setState(() {
-                      data = value;
+                      data.data = value;
+                      data.addData(value);
+                      Provider.of<MyModel>(context, listen: false).data = value;
                     });
                   });
-                FacebookAuth.instance.login();
+                  return value;
+                });
+
+                final AccessToken accessToken =
+                    await FacebookAuth.instance.accessToken;
+                if (accessToken != null) {
+                  Navigator.of(context).push(
+                      MaterialPageRoute(builder: (context) => BottomTab()));
+                }
               },
               child: Text("Login with Facebook"),
-            ),
-            if (data != null) Text(data.toString()),
-            if (data != null) Text(data["email"].toString())
+            )
           ],
         ),
       ),
     );
   }
-}
-
-String prettyPrint(Map json) {
-  JsonEncoder encoder = new JsonEncoder.withIndent('  ');
-  String pretty = encoder.convert(json);
-  return pretty;
 }
