@@ -21,7 +21,7 @@ class _HomeState extends State<Home> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             ElevatedButton(
-              onPressed: () {
+              onPressed: () async{
                 FacebookAuth.instance.webInitialize(
                   appId: "296063998944959",
                   cookie: true,
@@ -30,11 +30,14 @@ class _HomeState extends State<Home> {
                 );
                 print("Auth");
                 FacebookAuth.i.expressLogin();
-                final token = FacebookAuth.getInstance().accessToken;
-                print(token);
-                setState(() async {
-                  data = await FacebookAuth.instance.getUserData();
+                FacebookAuth.getInstance().accessToken.then((token) {
+                  print(token);
                 });
+                  FacebookAuth.instance.getUserData().then((value){
+                    setState(() {
+                      data = value;
+                    });
+                  });
                 FacebookAuth.instance.login();
               },
               child: Text("Login with Facebook"),
