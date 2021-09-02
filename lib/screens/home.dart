@@ -48,7 +48,13 @@ class _HomeState extends State<Home> {
                 }
               },
               child: Text("Login with Facebook"),
-            )
+            ),
+            IconButton(
+                onPressed: () {
+                  Navigator.of(context).push(
+                      MaterialPageRoute(builder: (context) => BottomTab()));
+                },
+                icon: Icon(Icons.arrow_forward))
           ],
         ),
       ),

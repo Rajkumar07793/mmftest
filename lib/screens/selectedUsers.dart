@@ -22,7 +22,7 @@ class UsersSelected extends StatelessWidget {
                 subtitle: Text(selectedUsers[index]["email"]),
               );
             } else {
-              return null;
+              return SizedBox(height: 0);
             }
           }),
     );
